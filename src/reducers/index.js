@@ -5,9 +5,9 @@ import {
   SET_USER,
   RECEIVE_SEARCH_LIST,
   SET_SEARCH_OPTIONS,
-  SEARCH_YOUTUBE,
-  STORE_PLAYER
-} from '../actions'
+  STORE_PLAYER,
+  STORE_COMMENTS
+} from '../actions/index'
 
 const debug = d('yt:reducers');
 
@@ -30,8 +30,6 @@ function user(state = null, action) {
     default:
       return state
   }
-
-  return state;
 }
 
 
@@ -44,8 +42,6 @@ function searchResults(state = null, action) {
     default:
       return state
   }
-
-  return state;
 }
 
 function searchOptions(state = initialState.searchOptions, action) {
@@ -58,8 +54,6 @@ function searchOptions(state = initialState.searchOptions, action) {
     default:
       return state
   }
-
-  return state;
 }
 
 function player(state = null, action) {
@@ -71,14 +65,23 @@ function player(state = null, action) {
     default:
       return state
   }
-
-  return state;
 }
 
+function comments(state = null, action) {
+  debug('Comments reducer. Action:', action);
+
+  switch (action.type) {
+    case STORE_COMMENTS:
+      return Object.assign({}, state, action.comments)
+    default:
+      return state
+  }
+}
 
 const rootReducer = combineReducers({
   user,
   player,
+  comments,
   searchResults,
   searchOptions
 })

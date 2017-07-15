@@ -8,7 +8,7 @@ import {
   setSearchOptions,
   loadYoutubeAPI,
   playVideo
-} from '../actions'
+} from '../actions/index'
 
 const debug = require('debug')('yt:containers:app')
 
@@ -65,10 +65,37 @@ class App extends Component {
   }
 
   render() {
-    const { value, onIncrement, onDecrement } = this.props
-
     let content;
     let searchResultsHTML;
+    let commentsHTML;
+
+    console.info('comments?', this.props.comments);
+
+    if (this.props.comments) {
+      let comments = this.props.comments;
+
+      commentsHTML = (
+        <div className="comments">
+          <h3>Comments</h3>
+          {Object.keys(comments).map(key => (
+						<div
+              key={comments[key].id}
+              className="media fadeIn animated">
+
+							<div className="media-left">
+							  <img className="media-object" src={comments[key].snippet.topLevelComment.snippet.authorProfileImageUrl} alt="" />
+							</div>
+							<div className="media-body">
+                <h6 className="media-heading">{comments[key].snippet.topLevelComment.snippet.authorDisplayName}</h6>
+								<p>{comments[key].snippet.topLevelComment.snippet.textDisplay}</p>
+                <p><small>Likes <span className="badge">{comments[key].snippet.topLevelComment.snippet.likeCount}</span></small></p>
+							</div>
+						</div>
+          ))}
+        </div>
+      );
+    }
+
 
     if (this.props.searchResults) {
       let searchResults = this.props.searchResults;
@@ -83,7 +110,7 @@ class App extends Component {
               className="media fadeIn animated">
 
 							<div className="media-left">
-							  <img className="media-object" src={searchResults[key].snippet.thumbnails.default.url} />
+							  <img className="media-object" src={searchResults[key].snippet.thumbnails.default.url} alt="" />
 							</div>
 							<div className="media-body">
 								<h4 className="media-heading">{searchResults[key].snippet.title}</h4>
@@ -140,7 +167,7 @@ class App extends Component {
         <nav className="navbar navbar-inverse">
           <div className="container-fluid">
             <div className="navbar-header">
-              <a className="navbar-brand" href="#">Youtube API Demo</a>
+              <a className="navbar-brand" href="#yapi">Youtube API Demo</a>
             </div>
             {content}
           </div>
@@ -153,6 +180,7 @@ class App extends Component {
           <div className="col-md-6">
             <div className={videoContainerCss}>
               <div id="player"></div>
+              {commentsHTML}
             </div>
           </div>
         </div>
@@ -177,7 +205,8 @@ function mapStateToProps(state) {
     searchYoutube,
     searchResults,
     searchOptions,
-    player
+    player,
+    comments
   } = state
 
 
@@ -196,7 +225,8 @@ function mapStateToProps(state) {
     searchOptions,
     searchResults,
     searchYoutube,
-    player
+    player,
+    comments
   }
 }
 
