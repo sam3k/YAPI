@@ -5,7 +5,6 @@ import {
   SET_USER,
   RECEIVE_SEARCH_LIST,
   SET_SEARCH_OPTIONS,
-  STORE_PLAYER,
   STORE_COMMENTS
 } from '../actions/index'
 
@@ -56,16 +55,7 @@ function searchOptions(state = initialState.searchOptions, action) {
   }
 }
 
-function player(state = null, action) {
-  debug('Search results reducer. Action:', action);
 
-  switch (action.type) {
-    case STORE_PLAYER:
-      return Object.assign({}, state, action.player)
-    default:
-      return state
-  }
-}
 
 function comments(state = null, action) {
   debug('Comments reducer. Action:', action);
@@ -80,7 +70,6 @@ function comments(state = null, action) {
 
 const rootReducer = combineReducers({
   user,
-  player,
   comments,
   searchResults,
   searchOptions

@@ -14,8 +14,8 @@ const GAPI_OPTS = {
 const HAS_GRANTED_SCOPES = 'https://www.googleapis.com/auth/youtube.force-ssl https://www.googleapis.com/auth/youtubepartner';
 
 
-function initYoutube(dispatch) {
-  debug('initYoutube');
+function initGAPI(dispatch) {
+  debug('initGAPI');
   gapi.client.init(GAPI_OPTS)
     .then(() => {
       let GoogleAuth = gapi.auth2.getAuthInstance();
@@ -35,30 +35,11 @@ function initYoutube(dispatch) {
         }));
       }
 
-      debug('initYoutube success');
+      debug('initGAPI success');
     })
-    .then(() => dispatch(receiveAuthYoutube()))
 }
 
 
-/**
- * Init Google API
- */
-export function authYoutube() {
-  debug('authenticate');
-
-  return dispatch => {
-    debug('about to dispatch `requestAuthYoutube`');
-
-    dispatch(requestAuthYoutube)
-
-    return gapi.client.init(GAPI_OPTS)
-      .then(() => {
-        debug('gapi init success', gapi);
-        gapi.load('client:auth2', initYoutube(dispatch));
-      });
-  }
-}
 
 export function authGoogle(googleAuth) {
   debug('Google Auth', googleAuth);
@@ -69,14 +50,13 @@ export function authGoogle(googleAuth) {
 }
 
 
-/**
- * Init Google API (GAPI)
- */
-export function initGAPI(googleAuth) {
-  debug('initGAPI. Param: googleAuth: ', googleAuth);
+
+export function loadGAPI() {
+  debug('loadGAPI');
   return (dispatch, getState) => {
-    debug('Need to authenticate');
-    return dispatch(authYoutube(googleAuth))
+    gapi.load('client', function () {
+      gapi.load('client:auth2', initGAPI(dispatch));
+    }); 
   }
 }
 
@@ -94,22 +74,4 @@ export function setUser(user) {
 
 
 
-export const REQUEST_AUTH_YOUTUBE = 'REQUEST_AUTH_YOUTUBE'
 
-export function requestAuthYoutube(params) {
-  debug('requestAuthYoutube');
-  return {
-    type: REQUEST_AUTH_YOUTUBE,
-    params
-  }
-}
-
-export const RECEIVE_AUTH_YOUTUBE = 'RECEIVE_AUTH_YOUTUBE'
-
-function receiveAuthYoutube() {
-  debug('receiveAuthYoutube');
-  return {
-    type: RECEIVE_AUTH_YOUTUBE,
-    receivedAt: Date.now()
-  }
-}

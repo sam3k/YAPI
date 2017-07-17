@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import {
-  initGAPI,
+  loadGAPI,
   authGoogle,
   fetchVideoSearch,
   setSearchOptions,
@@ -12,7 +12,6 @@ import {
 
 const debug = require('debug')('yt:containers:app')
 
-/*global gapi:true*/
 
 class App extends Component {
   constructor(props) {
@@ -24,15 +23,8 @@ class App extends Component {
   }
 
   componentDidMount () {
-    let self = this;
-    const { googleAuth } = this.props;
-
     this.props.dispatch(loadYoutubeAPI());
-
-    // TODO: move to actions
-    gapi.load('client', function () {
-      gapi.load('client:auth2', self.props.dispatch(initGAPI(googleAuth)));
-    });
+    this.props.dispatch(loadGAPI());
   }
 
   onAuthClick() {
@@ -68,8 +60,6 @@ class App extends Component {
     let content;
     let searchResultsHTML;
     let commentsHTML;
-
-    console.info('comments?', this.props.comments);
 
     if (this.props.comments) {
       let comments = this.props.comments;
@@ -205,27 +195,14 @@ function mapStateToProps(state) {
     searchYoutube,
     searchResults,
     searchOptions,
-    player,
     comments
   } = state
-
-
-  /*const {
-    isFetching,
-    lastUpdated,
-    items: posts
-  } = postsBySubreddit[selectedSubreddit] || {
-    isFetching: true,
-    items: []
-  }*/
-
 
   return {
     user,
     searchOptions,
     searchResults,
     searchYoutube,
-    player,
     comments
   }
 }

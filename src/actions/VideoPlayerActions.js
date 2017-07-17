@@ -54,18 +54,6 @@ export function playVideo(videoId) {
 }
 
 
-function fetchVideoComments(dispatch, videoId) {
-  gapi.client.youtube.commentThreads.list({
-    order: 'relevance',
-    part: 'snippet',
-    videoId: videoId,
-    maxResults: 10
-  })
-  .then((json) => {
-    debug('Youtube comments successfully fetched', json);
-    // dispatch.....
-  });
-}
 
 export const STORE_COMMENTS = 'STORE_COMMENTS';
 
@@ -77,12 +65,4 @@ function storeComments(comments) {
   }
 }
 
-export const STORE_PLAYER = 'STORE_PLAYER';
 
-function storePlayer(player) {
-  debug('storePlayer', player);
-  return {
-    type: STORE_PLAYER,
-    player
-  }
-}
