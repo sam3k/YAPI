@@ -33,14 +33,18 @@ class App extends Component {
   }
 
   handleKeyUp(e) {
+    this.props.dispatch(setSearchOptions({
+      q: e.target.value
+    }));
+
     if (e.keyCode === 13) {
       this.handleGoClick(e.target.value)
     }
   }
 
-  onPlayVideo(videoId) {
-    debug('onPlayVideo -> videoId:', videoId);
-    this.props.dispatch(playVideo(videoId));
+  onPlayVideo(videoId, currIndex) {
+    debug('onPlayVideo -> videoId:', videoId, 'currIndex', currIndex);
+    this.props.dispatch(playVideo(videoId, currIndex));
   }
 
   onSortBy(e) {
@@ -54,6 +58,10 @@ class App extends Component {
     debug('handleGoClick');
     let searchText = this.refs.input.value;
     this.props.dispatch(fetchVideoSearch(searchText))
+  }
+
+  toggleFavorite(videoId) {
+    debug('toggleFavorite', videoId);
   }
 
   render() {
@@ -95,7 +103,7 @@ class App extends Component {
           {Object.keys(searchResults).map(key => (
 						<div
               // () => this.handleRemove(id)
-              onClick={() => this.onPlayVideo(searchResults[key].id.videoId)}
+              onClick={() => this.onPlayVideo(searchResults[key].id.videoId, key)}
               key={searchResults[key].id.videoId}
               className="media fadeIn animated">
 
@@ -131,7 +139,7 @@ class App extends Component {
 					<div className="form-group">
 						<input size="30"
 									 ref="input"
-									 defaultValue=""
+									 defaultValue={this.props.searchOptions.q}
 									 className="form-control"
 									 placeholder="Search Videos"
 									 onKeyUp={this.handleKeyUp} />
@@ -149,6 +157,21 @@ class App extends Component {
 						</form>
           </div> <button className="btn btn-default" onClick={this.handleGoClick}>Search</button>
 				</div>
+      );
+    }
+
+    let favorite;
+
+    if (this.props.comments) {
+    // if (this.props.player) {
+      console.warn('BOOOM');
+      // if favorited or not if statement here
+      favorite = (
+        <div
+        // onClick={() => this.onPlayVideo(searchResults[key].id.videoId)}
+        onClick={this.toggleFavorite} className="add-to-favorites">
+          <i className="fa fa-heart-o fa-2x"></i> Add to favorites
+        </div>
       );
     }
 
@@ -170,6 +193,7 @@ class App extends Component {
           <div className="col-md-6">
             <div className={videoContainerCss}>
               <div id="player"></div>
+              {favorite}
               {commentsHTML}
             </div>
           </div>

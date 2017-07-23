@@ -6,8 +6,6 @@ let player;
 
 /*global YT:true gapi:true */
 
-
-
 export function loadYoutubeAPI() {
   debug('Load Youtube API');
 
@@ -21,7 +19,7 @@ export function loadYoutubeAPI() {
 }
 
 
-export function playVideo(videoId) {
+export function playVideo(videoId, key) {
   debug('Play video');
 
   return (dispatch, getState) => {
@@ -36,8 +34,9 @@ export function playVideo(videoId) {
           'onReady': (e) => { e.target.playVideo() }
         }
       });
-      //dispatch(storePlayer(player));
     }
+
+    dispatch(setCurrentVideo(videoId, key, getState()));
 
 		gapi.client.youtube.commentThreads.list({
 			order: 'relevance',
@@ -53,6 +52,19 @@ export function playVideo(videoId) {
   }
 }
 
+
+export const SET_CURR_VIDEO = 'SET_CURR_VIDEO';
+
+function setCurrentVideo(videoId, key, state) {
+  let videoDetails = state.searchResults[key];
+
+  debug('setCurrentVideo', videoId, 'details:', videoDetails);
+
+  return {
+    type: SET_CURR_VIDEO,
+    videoDetails: videoDetails
+  }
+}
 
 
 export const STORE_COMMENTS = 'STORE_COMMENTS';

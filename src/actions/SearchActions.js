@@ -8,7 +8,8 @@ const debug = d('yt:actions:search');
 
 export function fetchVideoSearch(searchText) {
   return (dispatch, getState) => {
-    const opts = merge({q: searchText}, getState().searchOptions);
+    // const opts = merge({q: searchText}, getState().searchOptions);
+    const opts = getState().searchOptions;
 
     return gapi.client.youtube.search.list(opts)
       .then((json) => {
