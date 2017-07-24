@@ -1,5 +1,4 @@
 import d from 'debug';
-import { merge } from 'lodash';
 
 /*global gapi:true*/
 

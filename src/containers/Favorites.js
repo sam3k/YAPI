@@ -10,6 +10,7 @@ import {
   setSearchOptions,
   loadYoutubeAPI,
   playVideo,
+  destroyVideoPlayer,
   addToFavorites
 } from '../actions/index'
 
@@ -29,6 +30,10 @@ class Favorites extends Component {
   componentDidMount () {
     this.props.dispatch(loadYoutubeAPI());
     this.props.dispatch(loadGAPI());
+  }
+
+  componentWillUnmount () {
+    this.props.dispatch(destroyVideoPlayer());
   }
 
   onAuthClick() {
@@ -71,10 +76,10 @@ class Favorites extends Component {
 
   render() {
     let content;
-    let searchResultsHTML;
+    let favoritesHTML;
     let commentsHTML;
 
-    if (this.props.comments) {
+    if (this.props.comments && this.props.currentVideo) {
       let comments = this.props.comments;
 
       commentsHTML = (
@@ -100,24 +105,23 @@ class Favorites extends Component {
     }
 
 
-    if (this.props.searchResults) {
-      let searchResults = this.props.searchResults;
+    if (this.props.favorites) {
+      let favs = this.props.favorites;
 
-      searchResultsHTML = (
+      favoritesHTML = (
         <div className="search-results">
-          {Object.keys(searchResults).map(key => (
+          {Object.keys(favs).map(key => (
 						<div
-              // () => this.handleRemove(id)
-              onClick={() => this.onPlayVideo(searchResults[key].id.videoId, key)}
-              key={searchResults[key].id.videoId}
+              onClick={() => this.onPlayVideo(favs[key].id.videoId, key)}
+              key={favs[key].id.videoId}
               className="media fadeIn animated">
 
 							<div className="media-left">
-							  <img className="media-object" src={searchResults[key].snippet.thumbnails.default.url} alt="" />
+							  <img className="media-object" src={favs[key].snippet.thumbnails.default.url} alt="" />
 							</div>
 							<div className="media-body">
-								<h4 className="media-heading">{searchResults[key].snippet.title}</h4>
-								<p>{searchResults[key].snippet.description}</p>
+								<h4 className="media-heading">{favs[key].snippet.title}</h4>
+								<p>{favs[key].snippet.description}</p>
 							</div>
 						</div>
           ))}
@@ -150,11 +154,10 @@ class Favorites extends Component {
 
     let favorite;
 
-    if (this.props.comments) {
+    if (this.props.comments && this.props.currentVideo) {
       let currVideoId = this.props.currentVideo.id.videoId;
 
       const favClass = find(this.props.favorites, function (vid) {
-        console.warn('-->', vid.id.videoId, currVideoId);
         return vid.id.videoId === currVideoId;
       }) ? 'fa-heart' : 'fa-heart-o';
 
@@ -177,11 +180,12 @@ class Favorites extends Component {
           </div>
         </nav>
 
-        <div className="row">
-          <div className="col-md-6">
+        <div>
+          <div className="col-md-12">
             <h1>Favorites</h1>
-
-            {searchResultsHTML}
+          </div>
+          <div className="col-md-6">
+            {favoritesHTML}
           </div>
           <div className="col-md-6">
             <div className={videoContainerCss}>

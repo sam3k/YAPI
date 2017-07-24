@@ -10,6 +10,7 @@ import {
   setSearchOptions,
   loadYoutubeAPI,
   playVideo,
+  destroyVideoPlayer,
   addToFavorites
 } from '../actions/index'
 
@@ -29,6 +30,10 @@ class Home extends Component {
   componentDidMount () {
     this.props.dispatch(loadYoutubeAPI());
     this.props.dispatch(loadGAPI());
+  }
+
+  componentWillUnmount () {
+    this.props.dispatch(destroyVideoPlayer());
   }
 
   onAuthClick() {
@@ -74,7 +79,7 @@ class Home extends Component {
     let searchResultsHTML;
     let commentsHTML;
 
-    if (this.props.comments) {
+    if (this.props.comments && this.props.currentVideo) {
       let comments = this.props.comments;
 
       commentsHTML = (
@@ -172,11 +177,10 @@ class Home extends Component {
 
     let favorite;
 
-    if (this.props.comments) {
+    if (this.props.comments && this.props.currentVideo) {
       let currVideoId = this.props.currentVideo.id.videoId;
 
       const favClass = find(this.props.favorites, function (vid) {
-        console.warn('-->', vid.id.videoId, currVideoId);
         return vid.id.videoId === currVideoId;
       }) ? 'fa-heart' : 'fa-heart-o';
 
@@ -199,7 +203,7 @@ class Home extends Component {
           </div>
         </nav>
 
-        <div className="row">
+        <div>
           <div className="col-md-6">
             {searchResultsHTML}
           </div>

@@ -7,6 +7,7 @@ import {
   SET_SEARCH_OPTIONS,
   STORE_COMMENTS,
   SET_CURR_VIDEO,
+  UNSET_CURR_VIDEO,
   TOGGLE_FAVORITE
 } from '../actions/index'
 
@@ -76,6 +77,8 @@ function currentVideo(state = null, action) {
       const incoming = action.payload.searchOptions;
       if (incoming) return {...state, ...incoming};
       return state;*/
+    case UNSET_CURR_VIDEO:
+      return action.currentVideo
     case SET_CURR_VIDEO:
       return {...state, ...action.currentVideo}
     default:

@@ -20,13 +20,29 @@ export function loadYoutubeAPI() {
 }
 
 
+export function destroyVideoPlayer() {
+  debug('Destroy video player');
+  return dispatch => {
+
+    if (player.destroy) {
+      player.destroy();
+      player = null;
+    }
+
+    dispatch(unsetCurrentVideo());
+  }
+}
+
+
 export function playVideo(videoId, key) {
   debug('Play video');
 
   return (dispatch, getState) => {
     if (player) {
+      debug('player already initialized. Playing next video');
       player.loadVideoById(videoId);
     } else {
+      debug('player about to be initialized');
       player = new YT.Player('player', {
         height: '390',
         width: '640',
@@ -64,6 +80,18 @@ function setCurrentVideo(videoId, key, state) {
   return {
     type: SET_CURR_VIDEO,
     currentVideo: videoDetails
+  }
+}
+
+
+export const UNSET_CURR_VIDEO = 'UNSET_CURR_VIDEO';
+
+function unsetCurrentVideo() {
+  debug('unsetCurrentVideo');
+
+  return {
+    type: UNSET_CURR_VIDEO,
+    currentVideo: null
   }
 }
 
