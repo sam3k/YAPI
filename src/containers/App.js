@@ -1,13 +1,15 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { find } from 'lodash';
 import {
   loadGAPI,
   authGoogle,
   fetchVideoSearch,
   setSearchOptions,
   loadYoutubeAPI,
-  playVideo
+  playVideo,
+  addToFavorites
 } from '../actions/index'
 
 const debug = require('debug')('yt:containers:app')
@@ -20,6 +22,7 @@ class App extends Component {
     this.handleGoClick = this.handleGoClick.bind(this)
     this.onAuthClick = this.onAuthClick.bind(this);
     this.onSortBy = this.onSortBy.bind(this);
+    this.toggleFavorite = this.toggleFavorite.bind(this);
   }
 
   componentDidMount () {
@@ -60,8 +63,9 @@ class App extends Component {
     this.props.dispatch(fetchVideoSearch(searchText))
   }
 
-  toggleFavorite(videoId) {
-    debug('toggleFavorite', videoId);
+  toggleFavorite() {
+    debug('toggleFavorite');
+    this.props.dispatch(addToFavorites());
   }
 
   render() {
@@ -163,14 +167,17 @@ class App extends Component {
     let favorite;
 
     if (this.props.comments) {
-    // if (this.props.player) {
-      console.warn('BOOOM');
-      // if favorited or not if statement here
+      let currVideoId = this.props.currentVideo.id.videoId;
+
+      const favClass = find(this.props.favorites, function (vid) {
+        console.warn('-->', vid.id.videoId, currVideoId);
+        return vid.id.videoId === currVideoId;
+      }) ? 'fa-heart' : 'fa-heart-o';
+
       favorite = (
         <div
-        // onClick={() => this.onPlayVideo(searchResults[key].id.videoId)}
         onClick={this.toggleFavorite} className="add-to-favorites">
-          <i className="fa fa-heart-o fa-2x"></i> Add to favorites
+          <i className={'fa fa-2x ' + favClass}></i> Add to favorites
         </div>
       );
     }
@@ -204,13 +211,9 @@ class App extends Component {
 }
 
 
-
-
 App.propTypes = {
   dispatch: PropTypes.func.isRequired
 }
-
-
 
 
 function mapStateToProps(state) {
@@ -219,7 +222,9 @@ function mapStateToProps(state) {
     searchYoutube,
     searchResults,
     searchOptions,
-    comments
+    comments,
+    favorites,
+    currentVideo
   } = state
 
   return {
@@ -227,7 +232,9 @@ function mapStateToProps(state) {
     searchOptions,
     searchResults,
     searchYoutube,
-    comments
+    comments,
+    favorites,
+    currentVideo
   }
 }
 

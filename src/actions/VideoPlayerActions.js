@@ -1,4 +1,5 @@
 import d from 'debug';
+import { find } from 'lodash';
 
 const debug = d('yt:actions:videoPlayer');
 
@@ -62,7 +63,7 @@ function setCurrentVideo(videoId, key, state) {
 
   return {
     type: SET_CURR_VIDEO,
-    videoDetails: videoDetails
+    currentVideo: videoDetails
   }
 }
 
@@ -78,3 +79,28 @@ function storeComments(comments) {
 }
 
 
+export function addToFavorites() {
+
+  return (dispatch, getState) => {
+    const videoId = getState().currentVideo.id.videoId;
+    debug('Add/Remove to favorites:', videoId);
+    const videoMeta = find(getState().searchResults, function (vid) {
+      return vid.id.videoId === videoId;
+    });
+
+    debug('about to add/remove': videoMeta);
+    
+    dispatch(toggleFavorites(videoMeta));
+  }
+}
+
+export const TOGGLE_FAVORITE = 'TOGGLE_FAVORITE';
+
+function toggleFavorites(videoMeta) {
+  debug('toggleFavorites', videoMeta);
+
+  return {
+    type: TOGGLE_FAVORITE,
+    video: videoMeta
+  }
+}

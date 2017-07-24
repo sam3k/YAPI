@@ -1,18 +1,20 @@
 import { combineReducers } from 'redux'
 import d from 'debug';
-import { merge } from 'lodash';
+import { merge, findIndex } from 'lodash';
 import {
   SET_USER,
   RECEIVE_SEARCH_LIST,
   SET_SEARCH_OPTIONS,
   STORE_COMMENTS,
-  SET_CURR_VIDEO
+  SET_CURR_VIDEO,
+  TOGGLE_FAVORITE
 } from '../actions/index'
 
 const debug = d('yt:reducers');
 
 const initialState = {
   user: null,
+  favorites: [],
   searchOptions: {
     order: 'relevance',
     part: 'snippet',
@@ -66,7 +68,7 @@ function searchOptions(state = initialState.searchOptions, action) {
 }
 
 
-function video(state = null, action) {
+function currentVideo(state = null, action) {
   debug('Video reducer. Action:', action);
 
   switch (action.type) {
@@ -75,15 +77,36 @@ function video(state = null, action) {
       if (incoming) return {...state, ...incoming};
       return state;*/
     case SET_CURR_VIDEO:
-      return {...state, ...action.videoDetails}
+      return {...state, ...action.currentVideo}
     default:
       return state
   }
 }
 
-function favorites(state = null, action) {
+function favorites(state = [], action) {
   debug('Favorites reducer. Action:', action);
-  return state;
+
+  switch (action.type) {
+    case 'persist/REHYDRATE':
+      const incoming = action.payload.favorites;
+      if (incoming) return [...state, ...incoming];
+      return state;
+    case TOGGLE_FAVORITE:
+      const index = findIndex(state, function(vid) {
+        return vid.id.videoId === action.video.id.videoId;
+      });
+
+      if (index > -1) {
+        return [
+          ...state.slice(0, index),
+          ...state.slice(index + 1)
+        ]
+      } else {
+        return [ ...state, action.video]
+      }
+    default:
+      return state;
+  }
 }
 
 
@@ -104,12 +127,10 @@ const rootReducer = combineReducers({
   comments,
   searchResults,
   searchOptions,
+  currentVideo,
   favorites
-  // rehydrateReducer
 })
 
 
 
 export default rootReducer
-
-
