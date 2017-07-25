@@ -114,13 +114,13 @@ class Favorites extends Component {
               key={favs[key].id.videoId}
               className="media fadeIn animated">
 
-							<div className="media-left">
-							  <img className="media-object" src={favs[key].snippet.thumbnails.default.url} />
-							</div>
-							<div className="media-body">
-								<h4 className="media-heading">{favs[key].snippet.title}</h4>
-								<p>{favs[key].snippet.description}</p>
-							</div>
+              <div className="media-left">
+                <img className="media-object" src={favs[key].snippet.thumbnails.default.url} />
+              </div>
+              <div className="media-body">
+                <h4 className="media-heading">{favs[key].snippet.title}</h4>
+                <p>{favs[key].snippet.description}</p>
+              </div>
 						</div>
           ))}
         </div>
@@ -135,11 +135,11 @@ class Favorites extends Component {
 
     if (!this.props.user || !this.props.user.isAuthorized) {
       content = (
-				<div className="navbar-form navbar-left">
-					<div className="form-group">
+        <div className="navbar-form navbar-left">
+          <div className="form-group">
             <button className="btn btn-default" onClick={this.onAuthClick}>Authenticate with Google</button>
-          </div>
-				</div>
+            </div>
+        </div>
       );
     } else {
       content = (
