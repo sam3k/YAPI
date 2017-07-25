@@ -19,11 +19,11 @@ export default class Root extends Component {
     return (
       <Provider store={store}>
         <ConnectedRouter history={history}>
-					<div>
-						<Route exact path="/" component={Home}/>
+          <div>
+            <Route exact path="/" component={Home}/>
             <Route path="/favorites" component={Favorites}/>
-					</div>
-				</ConnectedRouter>
+          </div>
+        </ConnectedRouter>
       </Provider>
     )
   }
