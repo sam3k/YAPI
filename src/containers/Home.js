@@ -52,8 +52,8 @@ class Home extends Component {
   }
 
   onPlayVideo(videoId, currIndex) {
-    debug('onPlayVideo -> videoId:', videoId, 'currIndex', currIndex);
-    this.props.dispatch(playVideo(videoId, currIndex));
+    debug('onPlayVideo -> videoId:', videoId);
+    this.props.dispatch(playVideo(videoId, 'searchResults'));
   }
 
   onSortBy(e) {
@@ -71,7 +71,7 @@ class Home extends Component {
 
   toggleFavorite() {
     debug('toggleFavorite');
-    this.props.dispatch(addToFavorites());
+    this.props.dispatch(addToFavorites('searchResults'));
   }
 
   render() {

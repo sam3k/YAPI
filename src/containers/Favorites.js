@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { find } from 'lodash';
 import {
   loadGAPI,
   authGoogle,
@@ -51,9 +50,9 @@ class Favorites extends Component {
     }
   }
 
-  onPlayVideo(videoId, currIndex) {
-    debug('onPlayVideo -> videoId:', videoId, 'currIndex', currIndex);
-    this.props.dispatch(playVideo(videoId, currIndex));
+  onPlayVideo(videoId) {
+    debug('onPlayVideo -> videoId:', videoId);
+    this.props.dispatch(playVideo(videoId, 'favorites'));
   }
 
   onSortBy(e) {
@@ -71,7 +70,7 @@ class Favorites extends Component {
 
   toggleFavorite() {
     debug('toggleFavorite');
-    this.props.dispatch(addToFavorites());
+    this.props.dispatch(addToFavorites('favorites'));
   }
 
   render() {
@@ -155,16 +154,10 @@ class Favorites extends Component {
     let favorite;
 
     if (this.props.comments && this.props.currentVideo) {
-      let currVideoId = this.props.currentVideo.id.videoId;
-
-      const favClass = find(this.props.favorites, function (vid) {
-        return vid.id.videoId === currVideoId;
-      }) ? 'fa-heart' : 'fa-heart-o';
-
       favorite = (
         <div
         onClick={this.toggleFavorite} className="add-to-favorites">
-          <i className={'fa fa-2x ' + favClass}></i> Add to favorites
+          <i className={'fa fa-2x fa-heart'}></i> Add to favorites
         </div>
       );
     }

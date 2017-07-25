@@ -24,7 +24,7 @@ export function destroyVideoPlayer() {
   debug('Destroy video player');
   return dispatch => {
 
-    if (player.destroy) {
+    if (player && player.destroy) {
       player.destroy();
       player = null;
     }
@@ -73,13 +73,16 @@ export function playVideo(videoId, key) {
 export const SET_CURR_VIDEO = 'SET_CURR_VIDEO';
 
 function setCurrentVideo(videoId, key, state) {
-  let videoDetails = state.searchResults[key];
+  const videoMeta = find(state[key], function (vid) {
+    debug('#', vid.id.videoId, videoId);
+    return vid.id.videoId === videoId;
+  });
 
-  debug('setCurrentVideo', videoId, 'details:', videoDetails);
+  debug('setCurrentVideo', videoId, 'details:', videoMeta);
 
   return {
     type: SET_CURR_VIDEO,
-    currentVideo: videoDetails
+    currentVideo: videoMeta
   }
 }
 
@@ -107,12 +110,13 @@ function storeComments(comments) {
 }
 
 
-export function addToFavorites() {
+export function addToFavorites(key) {
 
   return (dispatch, getState) => {
     const videoId = getState().currentVideo.id.videoId;
     debug('Add/Remove to favorites:', videoId);
-    const videoMeta = find(getState().searchResults, function (vid) {
+    debug('searchResults', getState()[key]);
+    const videoMeta = find(getState()[key], function (vid) {
       return vid.id.videoId === videoId;
     });
 
@@ -126,6 +130,11 @@ export const TOGGLE_FAVORITE = 'TOGGLE_FAVORITE';
 
 function toggleFavorites(videoMeta) {
   debug('toggleFavorites', videoMeta);
+
+  /*const videoMeta = find(state[key], function (vid) {
+    debug('#', vid.id.videoId, videoId);
+    return vid.id.videoId === videoId;
+  });*/
 
   return {
     type: TOGGLE_FAVORITE,

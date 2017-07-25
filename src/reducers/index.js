@@ -96,6 +96,7 @@ function favorites(state = [], action) {
       return state;
     case TOGGLE_FAVORITE:
       const index = findIndex(state, function(vid) {
+        console.log('--', vid, action);
         return vid.id.videoId === action.video.id.videoId;
       });
 
