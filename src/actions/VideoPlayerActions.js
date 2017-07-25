@@ -55,16 +55,16 @@ export function playVideo(videoId, key) {
 
     dispatch(setCurrentVideo(videoId, key, getState()));
 
-		gapi.client.youtube.commentThreads.list({
-			order: 'relevance',
-			part: 'snippet',
-			videoId: videoId,
-			maxResults: 10
-		})
-		.then((json) => {
-			debug('Youtube comments successfully fetched', json.result);
-			dispatch(storeComments(json.result.items))
-		});
+    gapi.client.youtube.commentThreads.list({
+      order: 'relevance',
+      part: 'snippet',
+      videoId: videoId,
+      maxResults: 10
+    })
+    .then((json) => {
+      debug('Youtube comments successfully fetched', json.result);
+      dispatch(storeComments(json.result.items))
+    });
 
   }
 }
