@@ -7,7 +7,6 @@ const debug = d('yt:actions:search');
 
 export function fetchVideoSearch(searchText) {
   return (dispatch, getState) => {
-    // const opts = merge({q: searchText}, getState().searchOptions);
     const opts = getState().searchOptions;
 
     return gapi.client.youtube.search.list(opts)
@@ -18,21 +17,6 @@ export function fetchVideoSearch(searchText) {
   };
 }
 
-
-/*
-function fetchVideoComments(dispatch, videoId) {
-  gapi.client.youtube.commentThreads.list({
-    order: 'relevance',
-    part: 'snippet',
-    videoId: videoId,
-    maxResults: 10
-  })
-  .then((json) => {
-    debug('Youtube comments successfully fetched', json);
-    // dispatch.....
-  });
-}
-*/
 
 export const RECEIVE_SEARCH_LIST = 'RECEIVE_SEARCH_LIST'
 

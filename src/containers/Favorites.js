@@ -19,6 +19,7 @@ const debug = require('debug')('yt:containers:app')
 class Favorites extends Component {
   constructor(props) {
     super(props);
+
     this.handleKeyUp = this.handleKeyUp.bind(this);
     this.handleGoClick = this.handleGoClick.bind(this)
     this.onAuthClick = this.onAuthClick.bind(this);
@@ -62,7 +63,7 @@ class Favorites extends Component {
     }));
   }
 
-  handleGoClick = () => {
+  handleGoClick() {
     debug('handleGoClick');
     let searchText = this.refs.input.value;
     this.props.dispatch(fetchVideoSearch(searchText))
@@ -84,20 +85,18 @@ class Favorites extends Component {
       commentsHTML = (
         <div className="comments">
           <h3>Comments</h3>
-          {Object.keys(comments).map(key => (
-						<div
-              key={comments[key].id}
-              className="media fadeIn animated">
 
-							<div className="media-left">
-							  <img className="media-object" src={comments[key].snippet.topLevelComment.snippet.authorProfileImageUrl} alt="" />
-							</div>
-							<div className="media-body">
+          {Object.keys(comments).map(key => (
+		        <div key={comments[key].id} className="media fadeIn animated">
+              <div className="media-left">
+                <img className="media-object" src={comments[key].snippet.topLevelComment.snippet.authorProfileImageUrl} alt="" />
+              </div>
+              <div className="media-body">
                 <h6 className="media-heading">{comments[key].snippet.topLevelComment.snippet.authorDisplayName}</h6>
-								<p>{comments[key].snippet.topLevelComment.snippet.textDisplay}</p>
+                <p>{comments[key].snippet.topLevelComment.snippet.textDisplay}</p>
                 <p><small>Likes <span className="badge">{comments[key].snippet.topLevelComment.snippet.likeCount}</span></small></p>
-							</div>
-						</div>
+              </div>
+            </div>
           ))}
         </div>
       );
@@ -116,7 +115,7 @@ class Favorites extends Component {
               className="media fadeIn animated">
 
 							<div className="media-left">
-							  <img className="media-object" src={favs[key].snippet.thumbnails.default.url} alt="" />
+							  <img className="media-object" src={favs[key].snippet.thumbnails.default.url} />
 							</div>
 							<div className="media-body">
 								<h4 className="media-heading">{favs[key].snippet.title}</h4>
@@ -129,6 +128,7 @@ class Favorites extends Component {
     }
 
     let videoContainerCss = '';
+
     if (this.props.player) {
       videoContainerCss = 'animated bounceInRight';
     }
@@ -137,13 +137,13 @@ class Favorites extends Component {
       content = (
 				<div className="navbar-form navbar-left">
 					<div className="form-group">
-            <button className="btn btn-default" onClick={this.onAuthClick}>Authenticate with Google</button>	
+            <button className="btn btn-default" onClick={this.onAuthClick}>Authenticate with Google</button>
           </div>
 				</div>
       );
     } else {
       content = (
-        <div> 
+        <div>
           <ul className="nav navbar-nav navbar-right">
             <li><Link to="/">Home</Link></li>
           </ul>
@@ -155,8 +155,7 @@ class Favorites extends Component {
 
     if (this.props.comments && this.props.currentVideo) {
       favorite = (
-        <div
-        onClick={this.toggleFavorite} className="add-to-favorites">
+        <div onClick={this.toggleFavorite} className="add-to-favorites">
           <i className={'fa fa-2x fa-heart'}></i> Add to favorites
         </div>
       );

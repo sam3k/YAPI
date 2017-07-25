@@ -114,14 +114,13 @@ export function addToFavorites(key) {
 
   return (dispatch, getState) => {
     const videoId = getState().currentVideo.id.videoId;
-    debug('Add/Remove to favorites:', videoId);
-    debug('searchResults', getState()[key]);
     const videoMeta = find(getState()[key], function (vid) {
       return vid.id.videoId === videoId;
     });
 
+    debug('Add/Remove to favorites:', videoId);
     debug('about to add/remove': videoMeta);
-    
+
     dispatch(toggleFavorites(videoMeta));
   }
 }
@@ -130,11 +129,6 @@ export const TOGGLE_FAVORITE = 'TOGGLE_FAVORITE';
 
 function toggleFavorites(videoMeta) {
   debug('toggleFavorites', videoMeta);
-
-  /*const videoMeta = find(state[key], function (vid) {
-    debug('#', vid.id.videoId, videoId);
-    return vid.id.videoId === videoId;
-  });*/
 
   return {
     type: TOGGLE_FAVORITE,

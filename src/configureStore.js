@@ -5,7 +5,6 @@ import rootReducer from './reducers';
 
 const loggerMiddleware = createLogger();
 
-
 export default function configureStore(preloadedState) {
   const enhancer = compose(
     applyMiddleware(thunkMiddleware, loggerMiddleware)

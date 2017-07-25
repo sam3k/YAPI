@@ -56,7 +56,7 @@ export function loadGAPI() {
   return (dispatch, getState) => {
     gapi.load('client', function () {
       gapi.load('client:auth2', initGAPI(dispatch));
-    }); 
+    });
   }
 }
 

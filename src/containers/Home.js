@@ -86,19 +86,18 @@ class Home extends Component {
         <div className="comments">
           <h3>Comments</h3>
           {Object.keys(comments).map(key => (
-						<div
+            <div
               key={comments[key].id}
               className="media fadeIn animated">
-
-							<div className="media-left">
-							  <img className="media-object" src={comments[key].snippet.topLevelComment.snippet.authorProfileImageUrl} alt="" />
-							</div>
-							<div className="media-body">
-                <h6 className="media-heading">{comments[key].snippet.topLevelComment.snippet.authorDisplayName}</h6>
-								<p>{comments[key].snippet.topLevelComment.snippet.textDisplay}</p>
-                <p><small>Likes <span className="badge">{comments[key].snippet.topLevelComment.snippet.likeCount}</span></small></p>
-							</div>
-						</div>
+                <div className="media-left">
+                  <img className="media-object" src={comments[key].snippet.topLevelComment.snippet.authorProfileImageUrl} alt="" />
+                </div>
+                <div className="media-body">
+                  <h6 className="media-heading">{comments[key].snippet.topLevelComment.snippet.authorDisplayName}</h6>
+                  <p>{comments[key].snippet.topLevelComment.snippet.textDisplay}</p>
+                  <p><small>Likes <span className="badge">{comments[key].snippet.topLevelComment.snippet.likeCount}</span></small></p>
+              </div>
+            </div>
           ))}
         </div>
       );
@@ -111,20 +110,18 @@ class Home extends Component {
       searchResultsHTML = (
         <div className="search-results">
           {Object.keys(searchResults).map(key => (
-						<div
-              // () => this.handleRemove(id)
+		    <div
               onClick={() => this.onPlayVideo(searchResults[key].id.videoId, key)}
               key={searchResults[key].id.videoId}
               className="media fadeIn animated">
-
-							<div className="media-left">
-							  <img className="media-object" src={searchResults[key].snippet.thumbnails.default.url} alt="" />
-							</div>
-							<div className="media-body">
-								<h4 className="media-heading">{searchResults[key].snippet.title}</h4>
-								<p>{searchResults[key].snippet.description}</p>
-							</div>
-						</div>
+                <div className="media-left">
+                  <img className="media-object" src={searchResults[key].snippet.thumbnails.default.url} alt="" />
+                </div>
+                <div className="media-body">
+                    <h4 className="media-heading">{searchResults[key].snippet.title}</h4>
+                    <p>{searchResults[key].snippet.description}</p>
+                </div>
+			</div>
           ))}
         </div>
       );
@@ -137,11 +134,11 @@ class Home extends Component {
 
     if (!this.props.user || !this.props.user.isAuthorized) {
       content = (
-				<div className="navbar-form navbar-left">
-					<div className="form-group">
-            <button className="btn btn-default" onClick={this.onAuthClick}>Authenticate with Google</button>	
+		<div className="navbar-form navbar-left">
+		  <div className="form-group">
+            <button className="btn btn-default" onClick={this.onAuthClick}>Authenticate with Google</button>
           </div>
-				</div>
+		</div>
       );
     } else {
       content = (
@@ -163,8 +160,8 @@ class Home extends Component {
                     <option value="date">Sort by Date</option>
                     <option value="rating">Sort by Rating</option>
                     <option value="title">Sort by Title</option>
-                  </select> 
-                </div>  
+                  </select>
+                </div>
               </form>
             </div> <button className="btn btn-default" onClick={this.handleGoClick}>Search</button>
           </div>
@@ -185,8 +182,7 @@ class Home extends Component {
       }) ? 'fa-heart' : 'fa-heart-o';
 
       favorite = (
-        <div
-        onClick={this.toggleFavorite} className="add-to-favorites">
+        <div onClick={this.toggleFavorite} className="add-to-favorites">
           <i className={'fa fa-2x ' + favClass}></i> Add to favorites
         </div>
       );

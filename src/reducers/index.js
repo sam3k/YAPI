@@ -28,8 +28,10 @@ function user(state = null, action) {
   debug('User reducer. Action:', action);
 
   switch (action.type) {
+
     case SET_USER:
       return Object.assign({}, state, action.user)
+
     default:
       return state
   }
@@ -40,12 +42,15 @@ function searchResults(state = null, action) {
   debug('Search results reducer. Action:', action);
 
   switch (action.type) {
+
     case 'persist/REHYDRATE':
       const incoming = action.payload.searchResults;
       if (incoming) return {...state, ...incoming};
       return state;
+
     case RECEIVE_SEARCH_LIST:
       return Object.assign({}, state, action.results);
+
     default:
       return state;
   }
@@ -56,13 +61,16 @@ function searchOptions(state = initialState.searchOptions, action) {
   debug('Search options reducer. Action:', action);
 
   switch (action.type) {
+
     case 'persist/REHYDRATE':
       const incoming = action.payload.searchOptions;
       if (incoming) return {...state, ...incoming};
       return state;
+
     case SET_SEARCH_OPTIONS:
       const opts = merge({}, initialState.searchOptions, action.options);
       return Object.assign({}, state, opts);
+
     default:
       return state
   }
@@ -73,14 +81,13 @@ function currentVideo(state = null, action) {
   debug('Video reducer. Action:', action);
 
   switch (action.type) {
-    /*case 'persist/REHYDRATE':
-      const incoming = action.payload.searchOptions;
-      if (incoming) return {...state, ...incoming};
-      return state;*/
+
     case UNSET_CURR_VIDEO:
       return action.currentVideo
+
     case SET_CURR_VIDEO:
       return {...state, ...action.currentVideo}
+
     default:
       return state
   }
@@ -90,13 +97,14 @@ function favorites(state = [], action) {
   debug('Favorites reducer. Action:', action);
 
   switch (action.type) {
+
     case 'persist/REHYDRATE':
       const incoming = action.payload.favorites;
       if (incoming) return [...state, ...incoming];
       return state;
+
     case TOGGLE_FAVORITE:
       const index = findIndex(state, function(vid) {
-        console.log('--', vid, action);
         return vid.id.videoId === action.video.id.videoId;
       });
 
@@ -119,8 +127,10 @@ function comments(state = null, action) {
   debug('Comments reducer. Action:', action);
 
   switch (action.type) {
+
     case STORE_COMMENTS:
       return Object.assign({}, state, action.comments)
+
     default:
       return state
   }
